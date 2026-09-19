@@ -91,12 +91,12 @@ export const extractEngineSignals = (rawText) => {
   // -------------------------------------------------------------------------
   // 2. URGENCY SIGNALS
   // -------------------------------------------------------------------------
-  if (content.includes('closes tomorrow') || content.includes('within 24 hours') || content.includes('expires in') || content.includes('within 12 hours') || content.includes('finalized this week') || content.includes('window closes tonight')) {
+  if (content.includes('closes tomorrow') || content.includes('within 24 hours') || content.includes('expires in') || content.includes('within 12 hours') || content.includes('finalized this week') || content.includes('window closes tonight') || content.includes('verify today') || content.includes('now to continue') || content.includes('action required today')) {
     signals.push({
       category: 'URGENCY',
       id: 'artificial_deadline',
       name: 'Artificial Deadline Pressure',
-      weight: 8,
+      weight: 10,
       severity: 'MEDIUM',
       matchedTerm: 'deadline',
       explanation: 'Imposes short deadlines to rush recipient compliance.'
@@ -115,15 +115,15 @@ export const extractEngineSignals = (rawText) => {
     });
   }
 
-  if (content.includes('bank account will be suspended') || content.includes('power supply will be disconnected') || content.includes('account locked') || content.includes('legal action') || content.includes('prevent service interruption')) {
+  if (content.includes('bank account will be suspended') || content.includes('power supply will be disconnected') || content.includes('account locked') || content.includes('legal action') || content.includes('prevent service interruption') || content.includes('on hold') || content.includes('cancel your application') || content.includes('application will be cancelled') || content.includes('failure to verify')) {
     signals.push({
       category: 'URGENCY',
       id: 'account_payment_threat',
-      name: 'Account Disconnection / Service Threat',
-      weight: 18,
+      name: 'Application Cancellation / Account Hold Threat',
+      weight: 20,
       severity: 'HIGH',
-      matchedTerm: 'account threat',
-      explanation: 'Threatens immediate loss of bank account access, account preferences, or utility service to induce panic.'
+      matchedTerm: 'cancellation threat',
+      explanation: 'Threatens immediate application cancellation, account hold, or service suspension to induce panic.'
     });
   }
 
@@ -142,15 +142,15 @@ export const extractEngineSignals = (rawText) => {
     });
   }
 
-  if (content.includes('review your candidate details') || content.includes('candidate verification form') || content.includes('verification form') || content.includes('verify your profile email') || content.includes('profile verification') || content.includes('account contact information was recently updated') || content.includes('account preferences')) {
+  if (content.includes('verify your details') || content.includes('review your candidate details') || content.includes('candidate verification form') || content.includes('verification form') || content.includes('verify your profile email') || content.includes('profile verification') || content.includes('account contact information was recently updated') || content.includes('account preferences') || content.includes('verify now')) {
     signals.push({
       category: 'INFORMATION',
       id: 'personal_information',
-      name: 'Personal & Account Preference Request',
-      weight: 12,
-      severity: 'MEDIUM',
-      matchedTerm: 'candidate verification',
-      explanation: 'Requests personal, candidate, or account preference details during unverified registration.'
+      name: 'Account & Candidate Verification Demand',
+      weight: 16,
+      severity: 'HIGH',
+      matchedTerm: 'verification demand',
+      explanation: 'Demands personal or candidate verification details via unverified channels.'
     });
   }
 
@@ -351,7 +351,7 @@ export const evaluateNegativeIndicators = (rawText, signals) => {
     });
   }
 
-  const hasNoPaymentOrCred = !signals.some(s => s.category === 'MONEY' || s.id === 'otp_harvesting' || s.id === 'password_credentials');
+  const hasNoPaymentOrCred = !signals.some(s => s.category === 'MONEY' || s.id === 'otp_harvesting' || s.id === 'password_credentials' || s.id === 'credential_harvesting_url' || s.id === 'personal_information');
   if (hasNoPaymentOrCred) {
     negativeIndicators.push({
       name: 'Zero Payment & Credential Demands',
@@ -422,6 +422,18 @@ export const applyCompoundRules = (rawText, signals, baseScore) => {
   const hasHiMumSignal = signals.some(s => s.id === 'hi_mum_family_emergency');
   if (hasHiMumSignal) {
     forcedFloor = Math.max(forcedFloor || 0, 78);
+  }
+
+  // Rule 9: Credential Harvesting URL (/login, /verify, /auth) -> Minimum Floor: HIGH RISK (82)
+  const hasCredentialHarvestingUrl = signals.some(s => s.id === 'credential_harvesting_url');
+  if (hasCredentialHarvestingUrl) {
+    forcedFloor = Math.max(forcedFloor || 0, 82);
+  }
+
+  // Rule 10: Internship/Job Context + (Credential Harvesting URL OR Cancellation Threat) -> Minimum Floor: CRITICAL (88)
+  const hasThreat = signals.some(s => s.id === 'account_payment_threat');
+  if (hasJobContext && (hasCredentialHarvestingUrl || hasThreat)) {
+    forcedFloor = Math.max(forcedFloor || 0, 88);
   }
 
   if (forcedFloor !== null && adjustedScore < forcedFloor) {

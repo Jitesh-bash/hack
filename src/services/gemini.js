@@ -969,6 +969,8 @@ CRITICAL INSTRUCTIONS:
 - Pay close attention to soft or conditional payment phrases such as "refundable registration amount", "reservation fee", "security deposit", "onboarding fee", or requests to pay to reserve a slot/seat.
 - When soft payment terms are present in an unsolicited opportunity or campus program context, score this as HIGH RISK or CRITICAL, not SAFE.
 - If payment language exists, DO NOT list "No payment request" in whyAppearsSafe.
+- CREDENTIAL HARVESTING & APPLICATION HOLD SCAMS:
+  Any unsolicited message, internship/job alert, or notification claiming that an application is "on hold" or demanding to "verify details now" via an external link containing "/login" or "/verify" under threat of cancellation MUST be scored as CRITICAL (riskScore: 90-99, fraudCategory: "Job & Internship Recruitment Fraud" or "Account Takeover & Identity Harvesting").
 - LEGITIMATE BANK TRANSACTION ALERTS:
   If the message is an authentic automated debit/credit alert for a past transaction (contains a masked account like "a/c XX0038", past debit/credit amount, merchant or UPI/RRN reference number like "UPI:129434569289", and standard bank dispute instructions without phishing links, credential/OTP requests, or remote app install requests), CLASSIFY AS SAFE (riskScore: 5-15, fraudCategory: "Legitimate Automated Bank Transaction Alert").
   Do NOT flag legitimate automated debit notifications as smishing simply because they mention a dispute phone number or SMS block format.
