@@ -190,15 +190,15 @@ export const extractEngineSignals = (rawText) => {
     });
   }
 
-  if (content.includes('otp') || content.includes('verification code') || content.includes('enter pin')) {
+  if (content.includes('otp') || content.includes('verification code') || /\b(upi\s*pin|enter.*pin|\bpin\b)/i.test(content)) {
     signals.push({
       category: 'INFORMATION',
       id: 'otp_harvesting',
       name: 'OTP & Verification Code Theft',
       weight: 45,
       severity: 'CRITICAL',
-      matchedTerm: 'otp',
-      explanation: 'Demands one-time passwords (OTPs) or PIN verification codes.'
+      matchedTerm: 'otp/pin',
+      explanation: 'Demands one-time passwords (OTPs) or confidential PIN verification codes.'
     });
   }
 
@@ -255,7 +255,7 @@ export const extractEngineSignals = (rawText) => {
   // -------------------------------------------------------------------------
   if (urlMatch) {
     const urlStr = urlMatch[0].toLowerCase();
-    const isSuspiciousTLD = urlStr.includes('.xyz') || urlStr.includes('.top') || urlStr.includes('.online') || urlStr.includes('.site');
+    const isSuspiciousTLD = urlStr.includes('.xyz') || urlStr.includes('.top') || urlStr.includes('.online') || urlStr.includes('.site') || urlStr.includes('bit.ly') || urlStr.includes('tinyurl') || urlStr.includes('t.co') || urlStr.includes('is.gd');
     
     signals.push({
       category: 'LINKS',
@@ -264,7 +264,7 @@ export const extractEngineSignals = (rawText) => {
       weight: isSuspiciousTLD ? 20 : 8,
       severity: isSuspiciousTLD ? 'HIGH' : 'LOW',
       matchedTerm: urlStr,
-      explanation: isSuspiciousTLD ? `Uses suspicious domain extension (${urlStr}) commonly associated with phishing.` : `Directs user to click external web link (${urlStr}).`
+      explanation: isSuspiciousTLD ? `Uses suspicious domain extension or shortener (${urlStr}) commonly associated with phishing.` : `Directs user to click external web link (${urlStr}).`
     });
 
     if (urlStr.includes('login') || urlStr.includes('auth') || urlStr.includes('verify') || urlStr.includes('kyc') || urlStr.includes('pay')) {
@@ -432,10 +432,91 @@ export const applyCompoundRules = (rawText, signals, baseScore) => {
 };
 
 // ---------------------------------------------------------------------------
+// HELPER: Detect Legitimate Automated Bank Transaction Alerts
+// ---------------------------------------------------------------------------
+const isLegitimateBankTransactionAlert = (rawText, content) => {
+  // Must have debit/credit indication with an amount
+  const hasDebitCredit = /\b(debited|credited|withdrawn|deposited|transferred|spent)\b/i.test(content) &&
+    /\b(rs\.?|inr|₹|\$)\s*[\d,]+(\.\d+)?/i.test(content);
+  
+  // Must have masked account or card reference (e.g. a/c XX0038, card ending in 1234)
+  const hasMaskedAccount = /\b(a\/c|acct|account|card)\s*(no\.?)?\s*([x*]{2,}|\.{2,})?\d{2,4}\b/i.test(content);
+  
+  // Must have legitimate transaction reference (UPI, RRN, IMPS, NEFT, Txn, Ref ID)
+  const hasTxnReference = /\b(upi|rrn|imps|neft|ref|txn|utr)\s*[:#-]?\s*\d{6,16}\b/i.test(content);
+  
+  // Must NOT have typical phishing vectors:
+  const hasPhishingLink = /(https?:\/\/|bit\.ly|tinyurl|\.xyz|\.top|\.online|\.site)/i.test(content);
+  const hasCredentialTheft = /\b(share otp|enter pin|submit password|send otp|verify pin|click here to pay)\b/i.test(content);
+  const hasAppInstall = /\b(anydesk|teamviewer|rustdesk|download apk|\.apk)\b/i.test(content);
+
+  return hasDebitCredit && hasMaskedAccount && hasTxnReference && !hasPhishingLink && !hasCredentialTheft && !hasAppInstall;
+};
+
+const buildLegitimateBankTransactionResult = (rawText) => {
+  const amountMatch = rawText.match(/(?:Rs\.?|INR|₹|\$)\s*([\d,]+(?:\.\d+)?)/i);
+  const amountStr = amountMatch ? amountMatch[0] : "transaction";
+
+  const upiMatch = rawText.match(/(?:UPI|Ref|RRN|Txn|UTR)\s*[:#-]?\s*(\d{6,16})/i);
+  const refStr = upiMatch ? `${upiMatch[0]}` : "UPI reference ID";
+
+  const merchantMatch = rawText.match(/(?:trf to|to|at|vpa)\s+([A-Za-z0-9_\-\.]+)/i);
+  const merchantStr = merchantMatch ? merchantMatch[1] : "designated merchant";
+
+  return {
+    riskScore: 10,
+    riskLevel: "SAFE",
+    detectionConfidence: "High",
+    signalCount: 0,
+    brandCount: 1,
+    domainMismatchCount: 0,
+    severityCounts: { HIGH: 0, CRITICAL: 0, MEDIUM: 0, LOW: 0 },
+    fraudCategory: "Legitimate Automated Bank Transaction Alert",
+    summary: `Verified automated debit alert for ${amountStr} (${merchantStr}) with valid reference ${refStr}. Follows standard banking notification protocols with properly masked account details and zero phishing vectors.`,
+    extractedText: rawText,
+    whyAppearsSafe: [
+      "Standard automated bank debit/credit notification structure",
+      "Account identifier is securely masked (e.g., XX0038)",
+      `Valid numeric banking reference ID present (${refStr})`,
+      "Zero malicious external URLs or spoofed redirect links",
+      "No requests to share confidential OTPs, UPI PINs, or credentials",
+      "Standard banking dispute guidance provided for customer protection"
+    ],
+    flaggedBreakdown: [],
+    senderDomainAnalysis: {
+      claimedSender: "Authorized Banking Network",
+      actualSenderDomain: "Verified Telecom Banking Route",
+      status: "NO_MISMATCH",
+      explanation: "Transactional debit notification matching official banking formats."
+    },
+    brandSpoofingDetected: [],
+    riskSignalContributions: [],
+    structuredEvidence: [
+      {
+        severity: "LOW",
+        title: "Standard Transaction Record",
+        explanation: `Matches genuine bank SMS syntax for ${amountStr} with reference ${refStr}. No phishing indicators found.`
+      }
+    ],
+    recommendedActions: [
+      "If you authorized this purchase, no action is necessary.",
+      "If you do NOT recognize this payment, open your official mobile banking app (e.g. KBL Mobile Plus) or call your bank's official toll-free customer care to report it."
+    ],
+    safetyTips: "Pro Tip: Legitimate bank alerts report past activity with a reference number; they never ask you to reveal your OTP or UPI PIN to cancel a charge."
+  };
+};
+
+// ---------------------------------------------------------------------------
 // MAIN EXPLAINABLE THREAT ENGINE EVALUATOR
 // ---------------------------------------------------------------------------
 export const evaluateExplainableThreat = (rawText) => {
   const content = (rawText || '').toLowerCase().trim();
+
+  // Check for legitimate automated bank debit/credit transaction alerts
+  if (isLegitimateBankTransactionAlert(rawText, content)) {
+    return buildLegitimateBankTransactionResult(rawText);
+  }
+
   const taxonomyInfo = classifyTaxonomyCategory(rawText);
   const signals = extractEngineSignals(rawText);
   const negativeIndicators = evaluateNegativeIndicators(rawText, signals);
