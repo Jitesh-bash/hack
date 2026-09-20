@@ -1,31 +1,54 @@
 # PhishGuard AI 🛡️
-> **Real-Time Multi-Modal AI Scam, Phishing & Fake Job Offer Intelligence Platform**  
-> *Built for Hack Devengers 2.0 (Open Innovation Track)*
+> **Autonomous Real-Time Threat Intelligence & Multimodal Scam Defense Platform**  
+> *Open Innovation Hackathon 2026 • AI & Cybersecurity Track*
 
-![PhishGuard AI Banner](https://img.shields.io/badge/PhishGuard-AI--Powered-00f2fe?style=for-the-badge&logo=shield)
-![Hackathon](https://img.shields.io/badge/Hackathon-Hack%20Devengers%202.0-7928ca?style=for-the-badge)
-![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-hack--wliq.vercel.app-2563eb?style=for-the-badge&logo=vercel)](https://hack-wliq.vercel.app/)
+[![Presentation Pitch Deck](https://img.shields.io/badge/Pitch%20Deck-12%20Slides-f59e0b?style=for-the-badge&logo=powerpoint)](https://hack-wliq.vercel.app/ppt.html)
+[![License: MIT](https://img.shields.io/badge/License-MIT-10b981?style=for-the-badge)](https://opensource.org/licenses/MIT)
+
+---
+
+## 🌐 Quick Access Links
+* **Live Web Application:** [https://hack-wliq.vercel.app/](https://hack-wliq.vercel.app/)
+* **Interactive Pitch Deck (12 Slides):** [https://hack-wliq.vercel.app/ppt.html](https://hack-wliq.vercel.app/ppt.html)
+* **Offline PowerPoint File:** [`ppt/PhishGuard_AI_Hackathon_Pitch.pptx`](./ppt/PhishGuard_AI_Hackathon_Pitch.pptx)
+
+---
+
+## 📸 Platform Interface Showcase
+
+![PhishGuard AI Platform Workspace](./Capture.PNG)
 
 ---
 
 ## 🎯 The Problem
-Every month, millions of students, job seekers, and digital users fall victim to **WhatsApp scams, fake internship offers demanding registration fees, SMS utility disconnection threats, and spoofed banking phishing URLs**.
-
-Common victims are students who don't know how to spot typosquatted domains or upfront payment job traps. Existing antivirus software only checks desktop malware, leaving social engineering scams unchecked.
+Modern cyber threats are no longer crude, misspelled emails that spam filters can catch. Attackers have pivoted to **high-context, psychologically tuned social engineering**:
+- **Campus & Internship Recruitment Scams:** Fraudulent offers impersonating MNCs (Meta, Microsoft, Cisco) and demanding upfront "refundable onboarding/registration fees".
+- **Account Disconnection & Urgency Traps:** Fake warnings claiming an application is "on hold" or power supply is "scheduled for cutoff", directing users to spoofed `/login` credential-harvesting pages.
+- **Reverse Social Engineering (Fake Debit Alerts):** Unsolicited transaction debit SMS alerts containing 10-digit private dispute numbers designed to induce panic callbacks.
+- **Mobile-First Infiltration:** Threats bypassing corporate gateways via WhatsApp forwards, Telegram groups, and screenshot captures.
 
 ---
 
 ## 💡 The Solution: PhishGuard AI
-**PhishGuard AI** is a multi-modal cyber safety platform that analyzes **chat screenshots, pasted message text, or suspicious URLs** in under 2 seconds.
+**PhishGuard AI** is an autonomous, explainable cybersecurity workspace designed to protect students and everyday users before they click, pay, or disclose credentials.
 
-### ✨ Key Features
-- 📸 **Multi-Modal Vision OCR Scanner:** Upload or drag & drop screenshots of WhatsApp chats, Telegram messages, or fake offer letters.
-- ⚡ **Instant Risk Gauge (0-100%):** Color-coded threat meter (Safe 🟢, Moderate 🟡, High Risk ⚠️, Critical Scam ☣️).
-- 🏷️ **Scam Classification Badges:** Categorizes threat vectors (*Fake Internship Fraud*, *Upfront Fee Trap*, *Bank OTP Phishing*, *Utility Disconnection Scam*).
-- 🚩 **Point-by-Point Red Flag Breakdown:** Clear explanation of *why* the message is dangerous.
-- 🛡️ **Actionable Defense Steps:** Gives users immediate 1-click advice ("Block contact", "Do NOT pay deposit").
-- 📤 **1-Click WhatsApp Warning Card:** Generates a shareable safety alert card to post in college or family WhatsApp groups.
-- 🧪 **Judge Demo Hub:** Pre-packaged 1-click real-world test scenarios for rapid judging.
+### ✨ Core Capabilities
+1. **Multimodal Tri-Channel Intake:**
+   - 📸 **Screenshot Vision OCR:** Upload or drag & drop screenshots of chat conversations, emails, or fake offer letters with client-side OCR extraction (powered by Tesseract.js).
+   - 💬 **Message Text Analysis:** Deep semantic inspection of pasted SMS, WhatsApp, and email bodies.
+   - 🔗 **URL & Domain Inspector:** Analyzes typosquatting, suspicious TLDs (`.xyz`, `.top`, `.online`), URL shorteners (`bit.ly`), and credential harvesting paths (`/login`, `/verify`).
+2. **Transparent Multi-Signal Behavioral Risk Scoring:**
+   - Calculates a 0–100 risk score based on **weighted behavioral indicators** (identity, urgency, credential harvesting, upfront fees, brand spoofing).
+   - **Explainable Evidence Cards:** Highlights the exact excerpt and psychological trick rather than giving a black-box verdict.
+3. **Compound Rule Safety Engine:**
+   - Enforces minimum risk floors on dangerous combinations (e.g. Job Offer + Credential URL = 88+ Critical).
+   - **False-Positive Prevention:** Accurately distinguishes genuine automated bank transaction debit notifications (with 12-digit UPI reference IDs) from malicious lures.
+4. **Actionable Defense Guidance:**
+   - Generates immediate 1-click countermeasures ("Do NOT pay deposit", "Verify on official student portal", "Report to 1930 / cybercrime.gov.in").
+   - **1-Click WhatsApp Warning Card:** Export and share alerts with classmates or family groups.
+5. **Interactive Judge Demo Hub:**
+   - Pre-loaded benchmark scenarios (Campus Internship Scam, Fake Bank Alert, Genuine Transaction) for 1-click demonstration.
 
 ---
 
@@ -33,53 +56,60 @@ Common victims are students who don't know how to spot typosquatted domains or u
 
 ```mermaid
 flowchart LR
-    A["User Input (Screenshot / Text / Link)"] --> B["Scanner Component"]
-    B --> C["Gemini Multi-Modal AI Engine"]
-    C --> D["Vision OCR + Scam Heuristics"]
-    D --> E["Threat Intelligence JSON"]
-    E --> F["Interactive Risk Dashboard"]
-    F --> G["Shareable WhatsApp Warning Card"]
+    A["User Input\n(Screenshot / Text / Link)"] --> B["Client-Side OCR\n& Entity Extraction"]
+    B --> C["Gemini Multi-Modal API\n+ Local Behavioral Engine"]
+    C --> D["Compound Rule\n& Floor Evaluation"]
+    D --> E["Explainable Threat\nIntelligence Dashboard"]
+    E --> F["Actionable Defense\n& Shareable Alert Card"]
 ```
 
-- **Frontend:** React 18, Vite, Tailwind CSS (Custom Dark Cyber Glassmorphism UI), Lucide React Icons.
-- **AI Core:** Google Gemini 2.0 / 1.5 Multi-Modal API + Intelligent Local Threat Fallback Engine.
-- **Styling & Motion:** Tailwind CSS + Custom Animations.
+* **Frontend:** React 18, Vite, Tailwind CSS (Tailored Ambient Light & Cyber Glassmorphism Dark Mode), Lucide React Icons.
+* **AI & Detection Engine:** Google Gemini 2.0 / 1.5 Flash API + Local Behavioral Fallback Risk Engine (`riskEngine.js`).
+* **OCR & Vision:** Client-Side Tesseract.js (zero server storage).
+* **Presentation Suite:** Native 16:9 4K PowerPoint generation via Puppeteer & PptxGenJS.
 
 ---
 
-## 🚀 Quick Start Guide
+## 🚀 Getting Started Locally
 
 ### Prerequisites
-- Node.js v18+ 
-- npm / yarn
+* **Node.js**: v18.0.0 or higher
+* **npm**: v9.0.0 or higher
 
-### Installation
+### Installation & Run
 ```bash
-# 1. Clone repository
-git clone https://github.com/your-username/phishguard-ai.git
+# 1. Clone the repository
+git clone https://github.com/Jitesh-bash/hack.git
 
-# 2. Navigate to project folder
-cd phishguard-ai
+# 2. Navigate to project directory
+cd hack
 
-# 3. Install dependencies
+# 3. Install project dependencies
 npm install
 
-# 4. Start local development server
+# 4. Launch development server
 npm run dev
 ```
 
-The app will open automatically at `http://localhost:3000`.
+The application will start locally at `http://localhost:3000/`.
 
 ---
 
-## 🛡️ Privacy & Safety Guarantee
-- **100% Client-Side Privacy:** Zero screenshots or personal chat logs are saved to database.
-- **Zero Third-Party Data Tracking.**
+## 📁 Presentation Slides & Hackathon Pitch Deck
+The complete 12-slide hackathon presentation deck is available in two formats:
+1. **Interactive Web Presentation:** Navigate to [`public/ppt.html`](./public/ppt.html) or run locally / view online at [`https://hack-wliq.vercel.app/ppt.html`](https://hack-wliq.vercel.app/ppt.html) (includes keyboard navigation `◀` / `▶` and 1-click PDF export).
+2. **PowerPoint Presentation File:** [`ppt/PhishGuard_AI_Hackathon_Pitch.pptx`](./ppt/PhishGuard_AI_Hackathon_Pitch.pptx) (rendered at crisp 4K Retina resolution).
 
 ---
 
-## 🏆 Hackathon Details
-- **Event:** Hack Devengers 2.0 (Powered by Unstop)
-- **Track:** Open Innovation
-- **Team:** Single Innovator
+## 🛡️ Privacy Guarantee
+* **100% Client-Side Inspection:** User chat screenshots and messages are processed ephemerally in browser memory and are never persisted to a database.
+* **Zero Third-Party Tracking.**
 
+---
+
+## 👥 Team & Hackathon Submission
+* **Project:** PhishGuard AI
+* **Hackathon:** Open Innovation Hackathon 2026
+* **Track:** AI & Cybersecurity
+* **Live Deployment:** [https://hack-wliq.vercel.app/](https://hack-wliq.vercel.app/)

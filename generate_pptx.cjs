@@ -144,7 +144,7 @@ async function createDeck() {
     });
 
     s.addShape(pres.ShapeType.line, { x: LEFT_M, y: 6.9, w: USABLE_W, h: 0, line: { color: BORDER_SUBTLE, width: 1 } });
-    s.addText('Team PhishGuard  •  Experience live at http://localhost:3001', {
+    s.addText('Team PhishGuard  •  Experience live at https://hack-wliq.vercel.app/', {
       x: LEFT_M, y: 6.98, w: USABLE_W, h: 0.35, fontSize: 9, fontFace: FONT_MONO, color: TEXT_MUTED, margin: 0
     });
   }
@@ -585,7 +585,7 @@ async function createDeck() {
       x: LEFT_M, y: 6.05, w: USABLE_W, h: 0.65, rectRadius: 0.08,
       fill: { color: 'F1F5F9' }, line: { color: BORDER_SUBTLE, width: 1 }
     });
-    s.addText('Analyst Console Live at http://localhost:3001  •  OCR & Entity parsing processed client-side in browser memory', {
+    s.addText('Analyst Console Live at https://hack-wliq.vercel.app/  •  OCR & Entity parsing processed client-side in browser memory', {
       x: LEFT_M, y: 6.05, w: USABLE_W, h: 0.65,
       fontSize: 10, fontFace: FONT_MONO, bold: true, color: TEXT_DARK, align: 'center', valign: 'middle', margin: 0
     });
@@ -941,7 +941,7 @@ async function createDeck() {
 
     s.addShape(pres.ShapeType.line, { x: LEFT_M, y: 6.2, w: USABLE_W, h: 0, line: { color: BORDER_SUBTLE, width: 1 } });
 
-    s.addText('Experience Live Scanner:  http://localhost:3001\nOpen Innovation Hackathon 2026  •  Team PhishGuard', {
+    s.addText('Experience Live Scanner:  https://hack-wliq.vercel.app/\nOpen Innovation Hackathon 2026  •  Team PhishGuard', {
       x: LEFT_M, y: 6.4, w: 6.5, h: 0.6,
       fontSize: 9.5, fontFace: FONT_MONO, color: TEXT_MUTED, lineSpacingMultiple: 1.3, margin: 0
     });

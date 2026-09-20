@@ -54,6 +54,16 @@ export default function Footer({ setActiveSection }) {
                   Demo
                 </button>
               </li>
+              <li>
+                <a
+                  href="/ppt.html"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-400 hover:text-blue-300 transition-colors text-left cursor-pointer flex items-center gap-1"
+                >
+                  Pitch Deck (12 Slides) ↗
+                </a>
+              </li>
             </ul>
           </div>
 

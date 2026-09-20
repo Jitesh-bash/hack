@@ -80,6 +80,15 @@ export default function Navbar({
           >
             How it Works
           </button>
+          <a
+            href="/ppt.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="h-full border-b-2 border-transparent font-medium text-sm text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center gap-1.5 cursor-pointer"
+          >
+            Pitch Deck
+            <span className="text-[10px] bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 px-1.5 py-0.5 rounded font-mono font-bold">12 Slides</span>
+          </a>
         </nav>
 
         {/* Right Status & Action */}
