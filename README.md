@@ -3,15 +3,12 @@
 > *Open Innovation Hackathon 2026 • AI & Cybersecurity Track*
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-hack--wliq.vercel.app-2563eb?style=for-the-badge&logo=vercel)](https://hack-wliq.vercel.app/)
-[![Presentation Pitch Deck](https://img.shields.io/badge/Pitch%20Deck-12%20Slides-f59e0b?style=for-the-badge&logo=powerpoint)](https://hack-wliq.vercel.app/ppt.html)
 [![License: MIT](https://img.shields.io/badge/License-MIT-10b981?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
 ---
 
-## 🌐 Quick Access Links
+## 🌐 Quick Access
 * **Live Web Application:** [https://hack-wliq.vercel.app/](https://hack-wliq.vercel.app/)
-* **Interactive Pitch Deck (12 Slides):** [https://hack-wliq.vercel.app/ppt.html](https://hack-wliq.vercel.app/ppt.html)
-* **Offline PowerPoint File:** [`ppt/PhishGuard_AI_Hackathon_Pitch.pptx`](./ppt/PhishGuard_AI_Hackathon_Pitch.pptx)
 
 ---
 
@@ -66,7 +63,6 @@ flowchart LR
 * **Frontend:** React 18, Vite, Tailwind CSS (Tailored Ambient Light & Cyber Glassmorphism Dark Mode), Lucide React Icons.
 * **AI & Detection Engine:** Google Gemini 2.0 / 1.5 Flash API + Local Behavioral Fallback Risk Engine (`riskEngine.js`).
 * **OCR & Vision:** Client-Side Tesseract.js (zero server storage).
-* **Presentation Suite:** Native 16:9 4K PowerPoint generation via Puppeteer & PptxGenJS.
 
 ---
 
@@ -92,13 +88,6 @@ npm run dev
 ```
 
 The application will start locally at `http://localhost:3000/`.
-
----
-
-## 📁 Presentation Slides & Hackathon Pitch Deck
-The complete 12-slide hackathon presentation deck is available in two formats:
-1. **Interactive Web Presentation:** Navigate to [`public/ppt.html`](./public/ppt.html) or run locally / view online at [`https://hack-wliq.vercel.app/ppt.html`](https://hack-wliq.vercel.app/ppt.html) (includes keyboard navigation `◀` / `▶` and 1-click PDF export).
-2. **PowerPoint Presentation File:** [`ppt/PhishGuard_AI_Hackathon_Pitch.pptx`](./ppt/PhishGuard_AI_Hackathon_Pitch.pptx) (rendered at crisp 4K Retina resolution).
 
 ---
 
