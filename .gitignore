@@ -5,4 +5,4 @@ dist-ssr
 .env
 .env.*
 .DS_Store
-
+ppt/slides_cache/
